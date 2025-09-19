@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <h1>📄 Smart Document Converter</h1>
+        <p>Upload your file and choose the conversion type.</p>
+
+        <form action="{{ url_for('convert') }}" method="POST" enctype="multipart/form-data">
+            <div class="file-upload">
+                <input type="file" name="file" id="fileInput" accept=".pdf,.docx,.ppt,.pptx" required>
+                <label for="fileInput">📂 Choose a file...</label>
+                <span id="fileChosen"><i class="fa-solid fa-file"></i> No file selected</span>
+            </div>
+
+            <div class="select-wrap">
+                <label for="conversion" class="select-label">Conversion</label>
+                <select name="conversion" id="conversion" required>
+                    <option value="" disabled selected>Select conversion</option>
+                    <option value="pdf2docx">PDF → DOCX</option>
+                    <option value="docx2pdf">DOCX → PDF</option>
+                    <option value="ppt2docx">PPTX → DOCX</option>
+                    <option value="docx2ppt">DOCX → PPTX</option>
+                </select>
+            </div>
+
+            <button type="submit" class="convert-btn">⚡ Convert</button>
+        </form>
+    </div>
+
+    <!-- small script to show chosen file with icon -->
+    <script>
+        const fileInput = document.getElementById("fileInput");
+        const fileChosen = document.getElementById("fileChosen");
+
+        fileInput.addEventListener("change", function(){
+            if (this.files[0]) {
+                let fileName = this.files[0].name;
+                let ext = fileName.split('.').pop().toLowerCase();
+                let icon = '<i class="fa-solid fa-file"></i>';
+
+                if (ext === "pdf") icon = '<i class="fa-solid fa-file-pdf" style="color:#ff5252;"></i>';
+                else if (ext === "docx") icon = '<i class="fa-solid fa-file-word" style="color:#2a82da;"></i>';
+                else if (ext === "ppt" || ext === "pptx") icon = '<i class="fa-solid fa-file-powerpoint" style="color:#f57c00;"></i>';
+
+                fileChosen.innerHTML = icon + " " + fileName;
+            } else {
+                fileChosen.innerHTML = '<i class="fa-solid fa-file"></i> No file selected';
+            }
+        });
+    </script>
+</body>
+</html>
